@@ -24,6 +24,8 @@ apis:
     properties:
       - type: Documentation
         url: https://www.weatherbit.io/api/weather-current
+      - type: OpenAPI
+        url: https://www.weatherbit.io/api/weatherbit-current-weather-openapi-original.yml    
     overlays: []
     aid: weatherbit:weatherbit-current-weather-api
   - name: Weatherbit Severe Weather Alerts API

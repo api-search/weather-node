@@ -1,0 +1,2742 @@
+openapi: 3.0.1
+info:
+  title: AccuWeather One API
+  description: AccuWeather's internal product API for the One platform.
+  version: v1
+paths:
+  /api/autocomplete:
+    get:
+      tags:
+        - Api
+      summary: Retrieves a list of locations matching the specified query
+      parameters:
+        - name: Query
+          in: query
+          description: The partial query to search against. Eg. 'New' to get things like New York or New Market
+          required: true
+          schema:
+            type: string
+            example: New
+          example: New
+        - name: Latitude
+          in: query
+          description: The latitude where responses will be biased.
+          schema:
+            type: number
+            format: double
+        - name: Longitude
+          in: query
+          description: The longitude where responses will be biased.
+          schema:
+            type: number
+            format: double
+        - name: Locale
+          in: query
+          description: ISO 639-2 and ISO 3166-1 code for the locale
+          schema:
+            type: string
+            example: en-us
+          example: en-us
+        - name: MeasurementDisplay
+          in: query
+          description: Display type for weather conditions and distance
+          schema:
+            $ref: '#/components/schemas/MeasurementDisplayType'
+          example: Imperial
+        - name: WindUnit
+          in: query
+          description: Additional display type for wind direction
+          schema:
+            $ref: '#/components/schemas/WindDirectionDisplayType'
+          example: Cardinal
+        - name: Theme
+          in: query
+          description: Theme for the application
+          schema:
+            $ref: '#/components/schemas/ThemeType'
+          example: System
+      responses:
+        '200':
+          description: Locations found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AutocompleteLocation'
+        '400':
+          description: Parameters are bad, details in body.
+  /api/resolve-location-redirect:
+    get:
+      tags:
+        - Api
+      summary: Takes in a Location as a query parameter
+      parameters:
+        - name: LocationType
+          in: query
+          description: The type of location to resolve. Eg. address, postalCode, place, locality
+          schema:
+            type: string
+            example: city
+          example: city
+        - name: PostalCode
+          in: query
+          description: The postal code of the location to resolve.
+          schema:
+            type: string
+            example: SW1A 1AA
+          example: SW1A 1AA
+        - name: City
+          in: query
+          description: The city of the location to resolve.
+          schema:
+            type: string
+            example: London
+          example: London
+        - name: AdminCode
+          in: query
+          description: The admin code for the location.
+          schema:
+            type: string
+            example: PA
+          example: PA
+        - name: CountryCode
+          in: query
+          description: The country code for the location.
+          schema:
+            type: string
+            example: US
+          example: US
+        - name: Position
+          in: query
+          description: Comma separated position of the location to resolve. Longitude, Latitude.
+          schema:
+            type: string
+            example: 51.500321,-0.145433
+          example: 51.500321,-0.145433
+        - name: Name
+          in: query
+          description: Simple name for a location, such as the name of a city
+          schema:
+            type: string
+            example: State Collage
+          example: State Collage
+        - name: LongName
+          in: query
+          description: Full name for a location, such as the name of an Admin or address
+          schema:
+            type: string
+            example: 385 Science Park Rd, State College, PA
+          example: 385 Science Park Rd, State College, PA
+        - name: LocationKey
+          in: query
+          description: AccuWeather Location key
+          schema:
+            type: string
+            example: '335315'
+          example: '335315'
+        - name: IsCurrent
+          in: query
+          description: if 'use current location' was selected
+          schema:
+            type: boolean
+            example: true
+          example: true
+        - name: RecentId
+          in: query
+          description: recent location's guid
+          schema:
+            type: string
+            example: tru4fa4496d-fca1-4c30-8784-fb612a45ee52e
+          example: tru4fa4496d-fca1-4c30-8784-fb612a45ee52e
+        - name: FavoriteId
+          in: query
+          description: favorite location's guid (Used for Edit)
+          schema:
+            type: string
+            example: tru4fa4496d-fca1-4c30-8784-fb612a45ee52e
+          example: tru4fa4496d-fca1-4c30-8784-fb612a45ee52e
+        - name: Language
+          in: query
+          description: Language for the query to use for the response.
+          schema:
+            type: string
+            example: en-us
+          example: en-us
+      responses:
+        '200':
+          description: Location resolved
+          content:
+            application/html:
+              schema:
+                $ref: '#/components/schemas/AutocompleteLocation'
+        '404':
+          description: Location was unable to be resolved
+  /api/resolve-location:
+    get:
+      tags:
+        - Api
+      summary: Takes in a Location as a query parameter
+      parameters:
+        - name: LocationType
+          in: query
+          description: The type of location to resolve. Eg. address, postalCode, place, locality
+          schema:
+            type: string
+            example: city
+          example: city
+        - name: PostalCode
+          in: query
+          description: The postal code of the location to resolve.
+          schema:
+            type: string
+            example: SW1A 1AA
+          example: SW1A 1AA
+        - name: City
+          in: query
+          description: The city of the location to resolve.
+          schema:
+            type: string
+            example: London
+          example: London
+        - name: AdminCode
+          in: query
+          description: The admin code for the location.
+          schema:
+            type: string
+            example: PA
+          example: PA
+        - name: CountryCode
+          in: query
+          description: The country code for the location.
+          schema:
+            type: string
+            example: US
+          example: US
+        - name: Position
+          in: query
+          description: Comma separated position of the location to resolve. Longitude, Latitude.
+          schema:
+            type: string
+            example: 51.500321,-0.145433
+          example: 51.500321,-0.145433
+        - name: Name
+          in: query
+          description: Simple name for a location, such as the name of a city
+          schema:
+            type: string
+            example: State Collage
+          example: State Collage
+        - name: LongName
+          in: query
+          description: Full name for a location, such as the name of an Admin or address
+          schema:
+            type: string
+            example: 385 Science Park Rd, State College, PA
+          example: 385 Science Park Rd, State College, PA
+        - name: LocationKey
+          in: query
+          description: AccuWeather Location key
+          schema:
+            type: string
+            example: '335315'
+          example: '335315'
+        - name: IsCurrent
+          in: query
+          description: if 'use current location' was selected
+          schema:
+            type: boolean
+            example: true
+          example: true
+        - name: RecentId
+          in: query
+          description: recent location's guid
+          schema:
+            type: string
+            example: tru4fa4496d-fca1-4c30-8784-fb612a45ee52e
+          example: tru4fa4496d-fca1-4c30-8784-fb612a45ee52e
+        - name: FavoriteId
+          in: query
+          description: favorite location's guid (Used for Edit)
+          schema:
+            type: string
+            example: tru4fa4496d-fca1-4c30-8784-fb612a45ee52e
+          example: tru4fa4496d-fca1-4c30-8784-fb612a45ee52e
+        - name: Language
+          in: query
+          description: Language for the query to use for the response.
+          schema:
+            type: string
+            example: en-us
+          example: en-us
+      responses:
+        '200':
+          description: Location resolved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutocompleteLocation'
+        '404':
+          description: Location was unable to be resolved
+  /api/favorite:
+    get:
+      tags:
+        - Api
+      summary: Resolves and updates the favorite location cookie
+      parameters:
+        - name: LocationType
+          in: query
+          description: The type of location to resolve. Eg. address, postalCode, place, locality
+          schema:
+            type: string
+            example: city
+          example: city
+        - name: PostalCode
+          in: query
+          description: The postal code of the location to resolve.
+          schema:
+            type: string
+            example: SW1A 1AA
+          example: SW1A 1AA
+        - name: City
+          in: query
+          description: The city of the location to resolve.
+          schema:
+            type: string
+            example: London
+          example: London
+        - name: AdminCode
+          in: query
+          description: The admin code for the location.
+          schema:
+            type: string
+            example: PA
+          example: PA
+        - name: CountryCode
+          in: query
+          description: The country code for the location.
+          schema:
+            type: string
+            example: US
+          example: US
+        - name: Position
+          in: query
+          description: Comma separated position of the location to resolve. Longitude, Latitude.
+          schema:
+            type: string
+            example: 51.500321,-0.145433
+          example: 51.500321,-0.145433
+        - name: Name
+          in: query
+          description: Simple name for a location, such as the name of a city
+          schema:
+            type: string
+            example: State Collage
+          example: State Collage
+        - name: LongName
+          in: query
+          description: Full name for a location, such as the name of an Admin or address
+          schema:
+            type: string
+            example: 385 Science Park Rd, State College, PA
+          example: 385 Science Park Rd, State College, PA
+        - name: LocationKey
+          in: query
+          description: AccuWeather Location key
+          schema:
+            type: string
+            example: '335315'
+          example: '335315'
+        - name: IsCurrent
+          in: query
+          description: if 'use current location' was selected
+          schema:
+            type: boolean
+            example: true
+          example: true
+        - name: RecentId
+          in: query
+          description: recent location's guid
+          schema:
+            type: string
+            example: tru4fa4496d-fca1-4c30-8784-fb612a45ee52e
+          example: tru4fa4496d-fca1-4c30-8784-fb612a45ee52e
+        - name: FavoriteId
+          in: query
+          description: favorite location's guid (Used for Edit)
+          schema:
+            type: string
+            example: tru4fa4496d-fca1-4c30-8784-fb612a45ee52e
+          example: tru4fa4496d-fca1-4c30-8784-fb612a45ee52e
+        - name: Language
+          in: query
+          description: Language for the query to use for the response.
+          schema:
+            type: string
+            example: en-us
+          example: en-us
+        - name: Locale
+          in: query
+          description: ISO 639-2 and ISO 3166-1 code for the locale
+          schema:
+            type: string
+            example: en-us
+          example: en-us
+        - name: MeasurementDisplay
+          in: query
+          description: Display type for weather conditions and distance
+          schema:
+            $ref: '#/components/schemas/MeasurementDisplayType'
+          example: Imperial
+        - name: WindUnit
+          in: query
+          description: Additional display type for wind direction
+          schema:
+            $ref: '#/components/schemas/WindDirectionDisplayType'
+          example: Cardinal
+        - name: Theme
+          in: query
+          description: Theme for the application
+          schema:
+            $ref: '#/components/schemas/ThemeType'
+          example: System
+      responses:
+        '200':
+          description: resolved location
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FavoriteLocation'
+        '400':
+          description: Query parameter was missing or empty
+  /api/current/{locationKey}:
+    get:
+      tags:
+        - Api
+      summary: Retrieves a the latest weather conditions for a location
+      parameters:
+        - name: locationKey
+          in: path
+          description: The location key to retrieve weather conditions for
+          required: true
+          schema:
+            type: string
+        - name: Locale
+          in: query
+          description: ISO 639-2 and ISO 3166-1 code for the locale
+          schema:
+            type: string
+            example: en-us
+          example: en-us
+        - name: MeasurementDisplay
+          in: query
+          description: Display type for weather conditions and distance
+          schema:
+            $ref: '#/components/schemas/MeasurementDisplayType'
+          example: Imperial
+        - name: WindUnit
+          in: query
+          description: Additional display type for wind direction
+          schema:
+            $ref: '#/components/schemas/WindDirectionDisplayType'
+          example: Cardinal
+        - name: Theme
+          in: query
+          description: Theme for the application
+          schema:
+            $ref: '#/components/schemas/ThemeType'
+          example: System
+      responses:
+        '200':
+          description: Current conditions found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FavoriteLocation'
+        '404':
+          description: Response was missing or empty
+  /api/hourly/{locationKey}:
+    get:
+      tags:
+        - Api
+      summary: Retrieves the latest hourly forecast for a location
+      parameters:
+        - name: locationKey
+          in: path
+          description: The location key to retrieve weather conditions for
+          required: true
+          schema:
+            type: string
+        - name: Locale
+          in: query
+          description: ISO 639-2 and ISO 3166-1 code for the locale
+          schema:
+            type: string
+            example: en-us
+          example: en-us
+        - name: MeasurementDisplay
+          in: query
+          description: Display type for weather conditions and distance
+          schema:
+            $ref: '#/components/schemas/MeasurementDisplayType'
+          example: Imperial
+        - name: WindUnit
+          in: query
+          description: Additional display type for wind direction
+          schema:
+            $ref: '#/components/schemas/WindDirectionDisplayType'
+          example: Cardinal
+        - name: Theme
+          in: query
+          description: Theme for the application
+          schema:
+            $ref: '#/components/schemas/ThemeType'
+          example: System
+        - name: hourCount
+          in: query
+          description: The number of hour to retrieve
+          schema:
+            type: integer
+            format: int32
+            default: 24
+      responses:
+        '200':
+          description: Hourly Forecast found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HourlyForecast'
+        '400':
+          description: Query parameter was missing or empty
+  /api/minutecast/{locationKey}:
+    get:
+      tags:
+        - Api
+      summary: Retrieves the latest minute by minute forecast for a location
+      parameters:
+        - name: locationKey
+          in: path
+          description: The location key to retrieve weather conditions for
+          required: true
+          schema:
+            type: string
+        - name: Locale
+          in: query
+          description: ISO 639-2 and ISO 3166-1 code for the locale
+          schema:
+            type: string
+            example: en-us
+          example: en-us
+        - name: MeasurementDisplay
+          in: query
+          description: Display type for weather conditions and distance
+          schema:
+            $ref: '#/components/schemas/MeasurementDisplayType'
+          example: Imperial
+        - name: WindUnit
+          in: query
+          description: Additional display type for wind direction
+          schema:
+            $ref: '#/components/schemas/WindDirectionDisplayType'
+          example: Cardinal
+        - name: Theme
+          in: query
+          description: Theme for the application
+          schema:
+            $ref: '#/components/schemas/ThemeType'
+          example: System
+      responses:
+        '200':
+          description: MinuteCast Forecast found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinuteCastForecast'
+        '400':
+          description: Query parameter was missing or empty
+  /api/daily/{locationKey}:
+    get:
+      tags:
+        - Api
+      summary: Retrieves the latest daily forecast for a location
+      parameters:
+        - name: locationKey
+          in: path
+          description: The location key to retrieve weather conditions for
+          required: true
+          schema:
+            type: string
+        - name: Locale
+          in: query
+          description: ISO 639-2 and ISO 3166-1 code for the locale
+          schema:
+            type: string
+            example: en-us
+          example: en-us
+        - name: MeasurementDisplay
+          in: query
+          description: Display type for weather conditions and distance
+          schema:
+            $ref: '#/components/schemas/MeasurementDisplayType'
+          example: Imperial
+        - name: WindUnit
+          in: query
+          description: Additional display type for wind direction
+          schema:
+            $ref: '#/components/schemas/WindDirectionDisplayType'
+          example: Cardinal
+        - name: Theme
+          in: query
+          description: Theme for the application
+          schema:
+            $ref: '#/components/schemas/ThemeType'
+          example: System
+        - name: dayCount
+          in: query
+          description: The number of hour to retrieve
+          schema:
+            type: integer
+            format: int32
+            default: 15
+      responses:
+        '200':
+          description: Daily Forecast found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DailyForecast'
+        '400':
+          description: Query parameter was missing or empty
+  /api/current-conditions/{locationKey}:
+    get:
+      tags:
+        - Api
+      summary: Retrieves the Current Conditions for a given location
+      parameters:
+        - name: locationKey
+          in: path
+          description: The location key to retrieve weather conditions for
+          required: true
+          schema:
+            type: string
+        - name: Locale
+          in: query
+          description: ISO 639-2 and ISO 3166-1 code for the locale
+          schema:
+            type: string
+            example: en-us
+          example: en-us
+        - name: MeasurementDisplay
+          in: query
+          description: Display type for weather conditions and distance
+          schema:
+            $ref: '#/components/schemas/MeasurementDisplayType'
+          example: Imperial
+        - name: WindUnit
+          in: query
+          description: Additional display type for wind direction
+          schema:
+            $ref: '#/components/schemas/WindDirectionDisplayType'
+          example: Cardinal
+        - name: Theme
+          in: query
+          description: Theme for the application
+          schema:
+            $ref: '#/components/schemas/ThemeType'
+          example: System
+      responses:
+        '200':
+          description: Current Conditions found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrentConditions'
+        '400':
+          description: Query parameter was missing or empty
+  /api/airQuality/{locationKey}:
+    get:
+      tags:
+        - Api
+      summary: Retrieves the Current Air Quality for a given location
+      parameters:
+        - name: locationKey
+          in: path
+          description: The location key to retrieve Air Quality for
+          required: true
+          schema:
+            type: string
+        - name: Locale
+          in: query
+          description: ISO 639-2 and ISO 3166-1 code for the locale
+          schema:
+            type: string
+            example: en-us
+          example: en-us
+        - name: MeasurementDisplay
+          in: query
+          description: Display type for weather conditions and distance
+          schema:
+            $ref: '#/components/schemas/MeasurementDisplayType'
+          example: Imperial
+        - name: WindUnit
+          in: query
+          description: Additional display type for wind direction
+          schema:
+            $ref: '#/components/schemas/WindDirectionDisplayType'
+          example: Cardinal
+        - name: Theme
+          in: query
+          description: Theme for the application
+          schema:
+            $ref: '#/components/schemas/ThemeType'
+          example: System
+      responses:
+        '200':
+          description: Current AirQuality found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AirQuality'
+        '400':
+          description: Query parameter was missing or empty
+  /api/hourlyaq/{locationKey}:
+    get:
+      tags:
+        - Api
+      summary: Retrieves the Hourly Air Quality forcast for a given location
+      parameters:
+        - name: locationKey
+          in: path
+          description: The location key to retrieve Air Quality for
+          required: true
+          schema:
+            type: string
+        - name: Locale
+          in: query
+          description: ISO 639-2 and ISO 3166-1 code for the locale
+          schema:
+            type: string
+            example: en-us
+          example: en-us
+        - name: MeasurementDisplay
+          in: query
+          description: Display type for weather conditions and distance
+          schema:
+            $ref: '#/components/schemas/MeasurementDisplayType'
+          example: Imperial
+        - name: WindUnit
+          in: query
+          description: Additional display type for wind direction
+          schema:
+            $ref: '#/components/schemas/WindDirectionDisplayType'
+          example: Cardinal
+        - name: Theme
+          in: query
+          description: Theme for the application
+          schema:
+            $ref: '#/components/schemas/ThemeType'
+          example: System
+        - name: hourCount
+          in: query
+          description: The Number of hours of air quality data to return
+          schema:
+            type: integer
+            format: int32
+            default: 24
+      responses:
+        '200':
+          description: Air Quality found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AirQuality'
+        '400':
+          description: Query parameter was missing or empty
+  /api/raine:
+    get:
+      tags:
+        - Api
+      summary: Retreives the Raine configuration for a page
+      parameters:
+        - name: Locale
+          in: query
+          description: ISO 639-2 and ISO 3166-1 code for the locale
+          schema:
+            type: string
+            example: en-us
+          example: en-us
+        - name: MeasurementDisplay
+          in: query
+          description: Display type for weather conditions and distance
+          schema:
+            $ref: '#/components/schemas/MeasurementDisplayType'
+          example: Imperial
+        - name: WindUnit
+          in: query
+          description: Additional display type for wind direction
+          schema:
+            $ref: '#/components/schemas/WindDirectionDisplayType'
+          example: Cardinal
+        - name: Theme
+          in: query
+          description: Theme for the application
+          schema:
+            $ref: '#/components/schemas/ThemeType'
+          example: System
+        - name: pageGroup
+          in: query
+          description: The page group name.
+          schema:
+            type: string
+        - name: platform
+          in: query
+          description: The platform name.
+          schema:
+            type: string
+            default: one
+        - name: locationKey
+          in: query
+          description: The location key to retrieve weather location.
+          schema:
+            type: string
+            default: ''
+      responses:
+        '200':
+          description: Page View response received
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RainePageView'
+        '400':
+          description: Parameters are bad, details in body.
+  /api/wintercast/{locationKey}:
+    get:
+      tags:
+        - Api
+      summary: Retrieves a the latest weather wintercast for a location
+      parameters:
+        - name: locationKey
+          in: path
+          description: The location key to retrieve weather conditions for
+          required: true
+          schema:
+            type: string
+        - name: language
+          in: query
+          description: The language to retrieve the information in
+          schema:
+            type: string
+            default: en-us
+        - name: isMetric
+          in: query
+          description: The units to retrieve the information in
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Wintercast found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EventConfidence'
+        '400':
+          description: Query parameter was missing or empty
+  /api/tropical/{locationKey}:
+    get:
+      tags:
+        - Api
+      summary: Retrieves a the latest weather tropical for a location
+      parameters:
+        - name: locationKey
+          in: path
+          description: The location key to retrieve tropical conditions for
+          required: true
+          schema:
+            type: string
+        - name: Locale
+          in: query
+          description: ISO 639-2 and ISO 3166-1 code for the locale
+          schema:
+            type: string
+            example: en-us
+          example: en-us
+        - name: MeasurementDisplay
+          in: query
+          description: Display type for weather conditions and distance
+          schema:
+            $ref: '#/components/schemas/MeasurementDisplayType'
+          example: Imperial
+        - name: WindUnit
+          in: query
+          description: Additional display type for wind direction
+          schema:
+            $ref: '#/components/schemas/WindDirectionDisplayType'
+          example: Cardinal
+        - name: Theme
+          in: query
+          description: Theme for the application
+          schema:
+            $ref: '#/components/schemas/ThemeType'
+          example: System
+      responses:
+        '200':
+          description: Wintercast found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EventConfidence'
+        '400':
+          description: Query parameter was missing or empty
+  /api/active-storms/{locationKey}:
+    get:
+      tags:
+        - Api
+      summary: Retrieves all active global storms
+      parameters:
+        - name: locationKey
+          in: path
+          description: The location key to retrieve tropical conditions for
+          required: true
+          schema:
+            type: string
+        - name: Locale
+          in: query
+          description: ISO 639-2 and ISO 3166-1 code for the locale
+          schema:
+            type: string
+            example: en-us
+          example: en-us
+        - name: MeasurementDisplay
+          in: query
+          description: Display type for weather conditions and distance
+          schema:
+            $ref: '#/components/schemas/MeasurementDisplayType'
+          example: Imperial
+        - name: WindUnit
+          in: query
+          description: Additional display type for wind direction
+          schema:
+            $ref: '#/components/schemas/WindDirectionDisplayType'
+          example: Cardinal
+        - name: Theme
+          in: query
+          description: Theme for the application
+          schema:
+            $ref: '#/components/schemas/ThemeType'
+          example: System
+        - name: gmtOffset
+          in: query
+          description: The GMT offset for the user
+          schema:
+            type: number
+            format: float
+        - name: timeZone
+          in: query
+          description: The time zone for the user
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Storms found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Storm'
+  /api/storm/{year}/{basinId}/{depressionNumber}:
+    get:
+      tags:
+        - Api
+      summary: Retrieves data about a specific storm
+      parameters:
+        - name: year
+          in: path
+          description: The year of the storm.
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: basinId
+          in: path
+          description: The id of the basin for the storm.
+          required: true
+          schema:
+            type: string
+        - name: depressionNumber
+          in: path
+          description: The the number given to the storm.
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: includePositions
+          in: query
+          description: A flag for whether to get all of the storms positions
+          schema:
+            type: boolean
+        - name: Locale
+          in: query
+          description: ISO 639-2 and ISO 3166-1 code for the locale
+          schema:
+            type: string
+            example: en-us
+          example: en-us
+        - name: MeasurementDisplay
+          in: query
+          description: Display type for weather conditions and distance
+          schema:
+            $ref: '#/components/schemas/MeasurementDisplayType'
+          example: Imperial
+        - name: WindUnit
+          in: query
+          description: Additional display type for wind direction
+          schema:
+            $ref: '#/components/schemas/WindDirectionDisplayType'
+          example: Cardinal
+        - name: Theme
+          in: query
+          description: Theme for the application
+          schema:
+            $ref: '#/components/schemas/ThemeType'
+          example: System
+        - name: locationKey
+          in: query
+          description: The location key to retrieve tropical conditions for
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Storm found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Storm'
+  /api/staticMap/{locationKey}:
+    get:
+      tags:
+        - Api
+      summary: Retrieves a the latest static map for a location
+      parameters:
+        - name: locationKey
+          in: path
+          description: The location key to retrieve static map for
+          required: true
+          schema:
+            type: string
+        - name: Locale
+          in: query
+          description: ISO 639-2 and ISO 3166-1 code for the locale
+          schema:
+            type: string
+            example: en-us
+          example: en-us
+        - name: MeasurementDisplay
+          in: query
+          description: Display type for weather conditions and distance
+          schema:
+            $ref: '#/components/schemas/MeasurementDisplayType'
+          example: Imperial
+        - name: WindUnit
+          in: query
+          description: Additional display type for wind direction
+          schema:
+            $ref: '#/components/schemas/WindDirectionDisplayType'
+          example: Cardinal
+        - name: Theme
+          in: query
+          description: Theme for the application
+          schema:
+            $ref: '#/components/schemas/ThemeType'
+          example: System
+      responses:
+        '200':
+          description: Static map found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EventConfidence'
+        '400':
+          description: Query parameter was missing or empty
+  /api/partner/{locationKey}:
+    get:
+      tags:
+        - Api
+      summary: Retrieve the partner for a specific location
+      parameters:
+        - name: locationKey
+          in: path
+          description: The location key to retrieve parnter
+          required: true
+          schema:
+            type: string
+        - name: language
+          in: query
+          description: The language for the user.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Partner found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Partner'
+        '400':
+          description: Query parameter was missing or empty
+  /api/daily-indices/{locationKey}:
+    get:
+      tags:
+        - Api
+      summary: Retrieves a the daily indices for a location
+      parameters:
+        - name: locationKey
+          in: path
+          description: The location key to retrieve weather conditions for
+          required: true
+          schema:
+            type: string
+        - name: Locale
+          in: query
+          description: ISO 639-2 and ISO 3166-1 code for the locale
+          schema:
+            type: string
+            example: en-us
+          example: en-us
+        - name: MeasurementDisplay
+          in: query
+          description: Display type for weather conditions and distance
+          schema:
+            $ref: '#/components/schemas/MeasurementDisplayType'
+          example: Imperial
+        - name: WindUnit
+          in: query
+          description: Additional display type for wind direction
+          schema:
+            $ref: '#/components/schemas/WindDirectionDisplayType'
+          example: Cardinal
+        - name: Theme
+          in: query
+          description: Theme for the application
+          schema:
+            $ref: '#/components/schemas/ThemeType'
+          example: System
+        - name: category
+          in: query
+          description: The index category to get the indices for.
+          schema:
+            $ref: '#/components/schemas/LifestyleCategory'
+      responses:
+        '200':
+          description: Indices found
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/DailyIndex'
+        '400':
+          description: Query parameter was missing or empty
+  /api/ads/{locationKey}:
+    get:
+      tags:
+        - Api
+      summary: Get the data for given ad slots
+      parameters:
+        - name: locationKey
+          in: path
+          description: AccuWeather location key
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Page id
+          schema:
+            type: string
+        - name: slots
+          in: query
+          description: Comma seperated list of ad slots
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ad data success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdData'
+  /api/test/linked-scope:
+    get:
+      tags:
+        - Test
+      summary: Example of a simple scope and linked scope
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecentLocation'
+components:
+  schemas:
+    Ad:
+      type: object
+      properties:
+        slot:
+          type: string
+          nullable: true
+        adDivId:
+          type: string
+          nullable: true
+        adUnitCode:
+          type: string
+          nullable: true
+        bidders:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bid'
+          nullable: true
+        upr:
+          type: number
+          format: float
+          nullable: true
+      additionalProperties: false
+    AdData:
+      type: object
+      properties:
+        globalAdConfig:
+          $ref: '#/components/schemas/PrebidTimeoutOutVars'
+        ortbConfig:
+          $ref: '#/components/schemas/OrtbSite'
+        adPageInfo:
+          $ref: '#/components/schemas/AdPageInfo'
+        adSlots:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Ad'
+          nullable: true
+        adInfo:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
+        uspString:
+          type: string
+          nullable: true
+        ppid:
+          type: string
+          nullable: true
+        isPrebidDisabled:
+          type: boolean
+      additionalProperties: false
+    AdInfo:
+      type: object
+      properties:
+        code:
+          type: string
+          description: "Simplified ad code for ad slots on the page.\r\nEg. '6581/web/us/*/news_info/country_home'"
+          nullable: true
+        status:
+          type: string
+          description: "One of 'active', 'missing', or 'restricted' indicating a user's ID status\r\nDefault missing."
+          nullable: true
+        cookie3p:
+          type: string
+          description: "One of 'active', 'missing', or 'restricted' indicating a user can access 3rd party cookies or not.\r\nDefault missing."
+          nullable: true
+      additionalProperties: false
+    AdPageInfo:
+      type: object
+      additionalProperties: false
+    AirQuality:
+      type: object
+      properties:
+        category:
+          type: string
+          nullable: true
+        categoryColor:
+          type: string
+          nullable: true
+        date:
+          type: string
+          format: date-time
+          nullable: true
+        dayOfWeek:
+          type: string
+          nullable: true
+        dayOfWeekAbbreviated:
+          type: string
+          nullable: true
+        displayDate:
+          type: string
+          nullable: true
+        displayTime:
+          type: string
+          nullable: true
+        dominantPollutant:
+          type: string
+          nullable: true
+        hazardStatement:
+          type: string
+          nullable: true
+        overallIndex:
+          type: number
+          format: double
+        overallPlumeLabsIndex:
+          type: number
+          format: double
+        pollutants:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pollutant'
+          nullable: true
+      additionalProperties: false
+    AutocompleteLocation:
+      type: object
+      properties:
+        locationType:
+          type: string
+          description: Type of location, eg. address or postalcode
+          nullable: true
+          example: address
+        city:
+          type: string
+          description: City name of the location, usually used for display purposes when sourcing weather data.
+          nullable: true
+          example: London
+        adminCode:
+          type: string
+          description: The admin code for the location.
+          nullable: true
+          example: PA
+        countryCode:
+          type: string
+          description: County code for the location.
+          nullable: true
+          example: US
+        postalCode:
+          type: string
+          description: Postal Code of the location, usually used for display purposes when sourcing weather data.
+          nullable: true
+        position:
+          type: array
+          items:
+            type: number
+            format: double
+          description: City name of the location, usually used for display purposes when sourcing weather data.
+          nullable: true
+          example:
+            - 51.50032
+            - -0.145433
+        name:
+          type: string
+          description: Editable name of the location to display to the user.
+          nullable: true
+          example: Buckingham Palace
+        longName:
+          type: string
+          description: Longer name of the location to display to the user, typically the full address.
+          nullable: true
+          example: Buckingham Palace, Westminster, London, Greater London GBR
+        locationSettingsInfo:
+          $ref: '#/components/schemas/LocationSettingsInfo'
+        source:
+          $ref: '#/components/schemas/LocationSources'
+      additionalProperties: false
+      description: A location that can be used to plot on a map.
+    BasinId:
+      enum:
+        - AL
+        - EP
+        - SI
+        - NI
+        - CP
+        - NP
+        - SP
+      type: string
+    Bid:
+      type: object
+      properties:
+        bidder:
+          type: string
+          nullable: true
+        params:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        isBuyItNow:
+          type: boolean
+      additionalProperties: false
+    ConfidenceQuantity:
+      type: object
+      properties:
+        value:
+          type: number
+          format: float
+          nullable: true
+        unit:
+          type: string
+          nullable: true
+        unitType:
+          type: integer
+          format: int32
+      additionalProperties: false
+    ConfidenceRange:
+      type: object
+      properties:
+        lower:
+          $ref: '#/components/schemas/QuantityRangeEstimate'
+        low:
+          $ref: '#/components/schemas/QuantityRangeEstimate'
+        likely:
+          $ref: '#/components/schemas/QuantityRangeEstimate'
+        high:
+          $ref: '#/components/schemas/QuantityRangeEstimate'
+        higher:
+          $ref: '#/components/schemas/QuantityRangeEstimate'
+      additionalProperties: false
+    CurrentConditions:
+      type: object
+      properties:
+        extended:
+          $ref: '#/components/schemas/ExtendedForecastInformation'
+        isDayTime:
+          type: boolean
+        iconCode:
+          type: integer
+          format: int32
+        now:
+          type: string
+          nullable: true
+        phrase:
+          type: string
+          nullable: true
+        realFeel:
+          type: string
+          nullable: true
+        realFeelShade:
+          type: string
+          nullable: true
+        temperature:
+          type: string
+          nullable: true
+        temperatureValue:
+          type: number
+          format: float
+          nullable: true
+        realFeelValue:
+          type: number
+          format: float
+          nullable: true
+        realFeelShadeValue:
+          type: number
+          format: float
+          nullable: true
+        realFeelPhrase:
+          type: string
+          nullable: true
+        realFeelShadePhrase:
+          type: string
+          nullable: true
+        apparentTempImperial:
+          type: number
+          format: float
+          nullable: true
+        windSpeedImperial:
+          type: number
+          format: float
+          nullable: true
+      additionalProperties: false
+    DailyForecast:
+      type: object
+      properties:
+        dayOfWeek:
+          type: string
+          nullable: true
+        shortDayOfWeek:
+          type: string
+          nullable: true
+        fullDayOfWeek:
+          type: string
+          nullable: true
+        epoch:
+          type: integer
+          format: int32
+          nullable: true
+        dateTime:
+          type: string
+          nullable: true
+        displayDate:
+          type: string
+          nullable: true
+        longDisplayDate:
+          type: string
+          nullable: true
+        hasAlert:
+          type: boolean
+        day:
+          $ref: '#/components/schemas/HalfDayForecast'
+        night:
+          $ref: '#/components/schemas/HalfDayForecast'
+      additionalProperties: false
+    DailyIndex:
+      type: object
+      properties:
+        indexName:
+          type: string
+          nullable: true
+        indexType:
+          $ref: '#/components/schemas/IndexType'
+        days:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndexDay'
+          nullable: true
+        activityType:
+          $ref: '#/components/schemas/LifestyleCategory'
+      additionalProperties: false
+    DefaultAppPageOptions:
+      enum:
+        - Locations
+        - Today
+        - Daily
+        - Hourly
+        - Maps
+        - News
+      type: string
+    DeviceInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          description: "Name of the user's browser.\r\nEg. 'Chrome'"
+          nullable: true
+        brand:
+          type: string
+          description: "Name of the user's device maker.\r\nEg. 'Apple' or 'Samsung'"
+          nullable: true
+        version:
+          type: string
+          description: "Version of the user's browser.\r\nEg. '16'"
+          nullable: true
+        category:
+          type: string
+          description: One of 'mobile', 'tablet', or 'desktop'
+          nullable: true
+      additionalProperties: false
+    EventConfidence:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date-time
+        epochStartDate:
+          type: integer
+          format: int32
+        endDate:
+          type: string
+          format: date-time
+        epochEndDate:
+          type: integer
+          format: int32
+        event:
+          $ref: '#/components/schemas/WeatherEventType'
+        eventKey:
+          type: string
+          nullable: true
+        eventName:
+          type: string
+          nullable: true
+        forecastRanges:
+          $ref: '#/components/schemas/ConfidenceRange'
+      additionalProperties: false
+    ExtendedForecastInformation:
+      type: object
+      properties:
+        ceiling:
+          type: string
+          nullable: true
+        cloudCover:
+          type: string
+          nullable: true
+        dewPoint:
+          type: string
+          nullable: true
+        gusts:
+          type: string
+          nullable: true
+        wind:
+          type: string
+          nullable: true
+        windValue:
+          type: number
+          format: double
+          nullable: true
+        windDegrees:
+          type: number
+          format: double
+          nullable: true
+        windDirection:
+          type: string
+          nullable: true
+        humidity:
+          type: string
+          nullable: true
+        humidityValue:
+          type: integer
+          format: int32
+          nullable: true
+        indoorHumidity:
+          type: string
+          nullable: true
+        indoorHumidityCategory:
+          type: string
+          nullable: true
+        precipitation:
+          type: string
+          nullable: true
+        pressure:
+          type: string
+          nullable: true
+        ice:
+          type: string
+          nullable: true
+        rain:
+          type: string
+          nullable: true
+        snow:
+          type: string
+          nullable: true
+        thunderstormProbability:
+          type: string
+          nullable: true
+        uv:
+          $ref: '#/components/schemas/UVIndex'
+        visibility:
+          type: string
+          nullable: true
+        precipSummary:
+          $ref: '#/components/schemas/PrecipitationSummary'
+      additionalProperties: false
+    FavoriteLocation:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        key:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        longName:
+          type: string
+          nullable: true
+        displayName:
+          type: string
+          nullable: true
+        displayTemperature:
+          type: string
+          nullable: true
+        displayHighTemperature:
+          type: string
+          nullable: true
+        displayLowTemperature:
+          type: string
+          nullable: true
+        displayRealFeel:
+          type: string
+          nullable: true
+        displayRealFeelShade:
+          type: string
+          nullable: true
+        icon:
+          type: integer
+          format: int32
+        conditions:
+          type: string
+          nullable: true
+        localTime:
+          type: string
+          nullable: true
+        color:
+          type: string
+          nullable: true
+        isBefore7PM:
+          type: boolean
+        isDayTime:
+          type: boolean
+        minuteCastForecast:
+          $ref: '#/components/schemas/MinuteCastForecast'
+        numberOfAlerts:
+          type: integer
+          format: int32
+          nullable: true
+        latitude:
+          type: number
+          format: double
+          nullable: true
+        longitude:
+          type: number
+          format: double
+          nullable: true
+      additionalProperties: false
+    HalfDayForecast:
+      type: object
+      properties:
+        temperature:
+          type: number
+          format: float
+          nullable: true
+        displayTemperature:
+          type: string
+          nullable: true
+        icon:
+          type: integer
+          format: int32
+        iconPhrase:
+          type: string
+          nullable: true
+        phrase:
+          type: string
+          nullable: true
+        longPhrase:
+          type: string
+          nullable: true
+        precip:
+          type: string
+          nullable: true
+        realFeelValue:
+          type: number
+          format: float
+          nullable: true
+      additionalProperties: false
+    HourlyForecast:
+      type: object
+      properties:
+        dayOfWeek:
+          type: string
+          nullable: true
+        shortDayOfWeek:
+          type: string
+          nullable: true
+        fullDayOfWeek:
+          type: string
+          nullable: true
+        epoch:
+          type: integer
+          format: int32
+          nullable: true
+        dateTime:
+          type: string
+          nullable: true
+        displayDate:
+          type: string
+          nullable: true
+        longDisplayDate:
+          type: string
+          nullable: true
+        hasAlert:
+          type: boolean
+        icon:
+          type: integer
+          format: int32
+        temperature:
+          type: string
+          nullable: true
+        precip:
+          type: string
+          nullable: true
+        phrase:
+          type: string
+          nullable: true
+        realFeel:
+          type: string
+          nullable: true
+        realFeelShade:
+          type: string
+          nullable: true
+        isDayLight:
+          type: boolean
+        extended:
+          $ref: '#/components/schemas/ExtendedForecastInformation'
+        airQuality:
+          $ref: '#/components/schemas/AirQuality'
+      additionalProperties: false
+    IndexDay:
+      type: object
+      properties:
+        dayOfWeek:
+          type: string
+          nullable: true
+        shortDayOfWeek:
+          type: string
+          nullable: true
+        fullDayOfWeek:
+          type: string
+          nullable: true
+        epoch:
+          type: integer
+          format: int32
+          nullable: true
+        dateTime:
+          type: string
+          nullable: true
+        displayDate:
+          type: string
+          nullable: true
+        longDisplayDate:
+          type: string
+          nullable: true
+        value:
+          type: integer
+          format: int32
+        category:
+          type: string
+          nullable: true
+        color:
+          type: string
+          nullable: true
+      additionalProperties: false
+    IndexType:
+      enum:
+        - Unknown
+        - Running
+        - Jogging
+        - Hiking
+        - Biking
+        - Golf
+        - Tennis
+        - Skateboarding
+        - Concert
+        - KiteFlyingForecast
+        - BeachAndPool
+        - Sailing
+        - Stargazing
+        - FishingForecast
+        - Construction
+        - Skiing
+        - Heart
+        - Mosquito
+        - Dust
+        - SnowDays
+        - Hunting
+        - ArthritisDay
+        - ArthritisNight
+        - Asthma
+        - BBQ
+        - CommonColdForecast
+        - Flu
+        - Migraine
+        - LawnMowing
+        - Outdoor
+        - Sinus
+        - Flying
+        - FieldReadiness
+        - GrassGrowing
+        - SoilMoisture
+        - SchoolBusStop
+        - HomeEnergy
+        - FuelEconomy
+        - Composting
+        - ShoppingForecast
+        - Driving
+        - Thirst
+        - Frizz
+        - DogWalking
+        - COPD
+        - IndoorPest
+        - OutdoorPest
+        - AccuLumenBrightness
+        - MorningExercise
+        - Clothing
+        - CommonCold
+        - Comfort
+        - CarWashing
+        - HeatStroke
+        - UVIntensity
+        - ClothesDrying
+        - AirPollution
+        - Tourism
+        - AirConditioning
+        - Fishing
+        - SunProtection
+        - Shopping
+        - Rowing
+        - Traffic
+        - RoadConditions
+        - Umbrella
+        - HairDressing
+        - NightLife
+        - Beer
+        - KiteFlying
+        - Makeup
+        - WindChills
+        - Mood
+        - Exercise
+        - Dating
+        - Allergy
+        - Beach
+        - Sunglasses
+        - ShortPhrase
+        - Hypertension
+        - Dryness
+        - ApparentTemperature
+        - PolutionPrevention
+        - FoodPoisoning
+        - WindChillDescending
+        - Heat
+        - Discomfort
+        - UVDescending
+        - PipeFreeze
+        - AtmosphericDispersion
+        - HeatSensitivityGeneral
+        - HeatSensitivityElderly
+        - HeatSensitivityChildren
+        - HeatSensitivityOutdoorWorking
+        - HeatSensitivityFarming
+        - HeatSensitivityGreenhouse
+        - HeatSensitivityVulnerableResidential
+        - AsthmaAndLungDisorder
+        - Stroke
+        - SkinSensitivity
+        - CommonColdDescending
+        - TreePollenLevels
+        - PinePollen
+        - WeedPollenLevels
+        - Arthritis
+        - OutdoorHomeGarden
+        - SoilHomeGarden
+        - FieldHomeGarden
+        - UV
+        - TreePollen
+        - RagweedPollen
+        - MoldPollen
+        - GrassPollen
+        - AirQuality
+        - FlightDelay
+        - IndoorActivity
+      type: string
+    LandmarkReference:
+      type: object
+      properties:
+        landmark:
+          type: string
+          nullable: true
+        distance:
+          type: string
+          nullable: true
+      additionalProperties: false
+    LifestyleCategory:
+      enum:
+        - Allergies
+        - Health
+        - OutdoorActivities
+        - TravelCommute
+        - HomeGarden
+        - Pests
+      type: string
+    LocationSettingsInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique Id created for favorite and recent locations
+          nullable: true
+          example: 50603e3f-5433-4d14-9b5f-01c8cf619d9b
+        locationKey:
+          type: string
+          description: AccuWeather Surefind location key for this location.
+          nullable: true
+          example: '328328'
+        name:
+          type: string
+          description: Simple name for a location, such as the name of a city
+          nullable: true
+          example: State Collage
+        longName:
+          type: string
+          description: Full name for a location, such as the name of an Admin or address
+          nullable: true
+          example: 385 Science Park Rd, State College, PA
+        displayName:
+          type: string
+          description: "Name used to display to the user as the placeholder\r\nThis differece from the LongName since will be sometimes display location name from\r\nthe AW API (Non-english/direct location key serach)"
+          nullable: true
+          example: 385 Science Park Rd, State College, PA or Eureka, CA USA
+        stationCode:
+          type: string
+          description: AccuWeather station code for this location.
+          nullable: true
+          example: EGRB
+        supportedDataSets:
+          type: array
+          items:
+            type: string
+          description: AccuWeather list of supported data sets for this location.
+          nullable: true
+          example:
+            - AirQualityCurrentConditions
+            - AirQualityForecasts
+            - Alerts
+            - DailyAirQualityForecast
+            - DailyPollenForecast
+            - ForecastConfidence
+            - FutureRadar
+            - MinuteCast
+            - ProximityNotification-Lightning
+            - Radar
+        supportsMinuteCast:
+          type: boolean
+          description: True if a location supports MinuteCast data.
+          nullable: true
+          readOnly: true
+          example: true
+        latitude:
+          type: number
+          description: Latitude for a location
+          format: double
+          nullable: true
+        longitude:
+          type: number
+          description: Longitude for a location
+          format: double
+          nullable: true
+        supportsEventConfidence:
+          type: boolean
+          description: True if a location supports probabilities on weather events.
+          nullable: true
+          readOnly: true
+          example: true
+      additionalProperties: false
+      description: Detailed keys for the location from AccuWeather to aid in weather data retrieval.
+    LocationSources:
+      enum:
+        - AccuWeather
+        - Radar
+        - Unknown
+      type: string
+      description: The parent provider of the location.
+    MeasurementDisplayType:
+      enum:
+        - Metric
+        - Imperial
+        - Hybrid
+      type: string
+    MinuteCastForecast:
+      type: object
+      properties:
+        summary60:
+          type: string
+          nullable: true
+        minutes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MinuteCastMinute'
+          nullable: true
+      additionalProperties: false
+    MinuteCastMinute:
+      type: object
+      properties:
+        displayTime:
+          type: string
+          nullable: true
+        minute:
+          type: integer
+          format: int32
+        color:
+          type: string
+          nullable: true
+        dbz:
+          type: number
+          format: float
+          nullable: true
+        precipitationType:
+          type: string
+          nullable: true
+      additionalProperties: false
+    MinuteCastStyle:
+      enum:
+        - Gauge
+        - Widgets
+      type: string
+    OrtbContent:
+      type: object
+      properties:
+        title:
+          type: string
+          nullable: true
+        url:
+          type: string
+          nullable: true
+        categories:
+          type: array
+          items:
+            type: string
+          nullable: true
+        productQuality:
+          type: string
+          nullable: true
+        context:
+          type: string
+          nullable: true
+        keywords:
+          type: string
+          nullable: true
+        sourceRelationship:
+          $ref: '#/components/schemas/OrtbRelationshipType'
+        language:
+          type: string
+          nullable: true
+        data:
+          $ref: '#/components/schemas/OrtbData'
+      additionalProperties: false
+    OrtbData:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        extensions:
+          type: object
+          additionalProperties:
+            nullable: true
+          nullable: true
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrtbSegment'
+          nullable: true
+      additionalProperties: false
+    OrtbPublisher:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        domain:
+          type: string
+          nullable: true
+        categories:
+          type: array
+          items:
+            type: string
+          nullable: true
+      additionalProperties: false
+    OrtbRelationshipType:
+      enum:
+        - Indirect
+        - Direct
+      type: string
+    OrtbSegment:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        value:
+          type: string
+          nullable: true
+      additionalProperties: false
+    OrtbSite:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        domain:
+          type: string
+          nullable: true
+        categories:
+          type: array
+          items:
+            type: string
+          nullable: true
+        sectionCategories:
+          type: array
+          items:
+            type: string
+          nullable: true
+        pageCategories:
+          type: array
+          items:
+            type: string
+          nullable: true
+        keywords:
+          type: string
+          nullable: true
+        pageUrl:
+          type: string
+          nullable: true
+        referrerUrl:
+          type: string
+          nullable: true
+        isOptimizedForMobile:
+          type: boolean
+        hasPrivacyPolicy:
+          type: boolean
+        publisher:
+          $ref: '#/components/schemas/OrtbPublisher'
+        content:
+          $ref: '#/components/schemas/OrtbContent'
+      additionalProperties: false
+    PageInfo:
+      type: object
+      properties:
+        group:
+          type: string
+          description: Page group like 'three-day' or 'hourly' designating the page category
+          nullable: true
+        url:
+          type: string
+          description: URL of the page
+          nullable: true
+        referrer:
+          type: string
+          description: Referrer of the page
+          nullable: true
+      additionalProperties: false
+    Partner:
+      type: object
+      properties:
+        siteName:
+          type: string
+          nullable: true
+        logo:
+          type: string
+          nullable: true
+        link:
+          type: string
+          nullable: true
+      additionalProperties: false
+    Pollutant:
+      type: object
+      properties:
+        concentration:
+          type: string
+          nullable: true
+        index:
+          type: number
+          format: double
+        name:
+          type: string
+          nullable: true
+        source:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+      additionalProperties: false
+    Polygon:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        coordinates:
+          type: array
+          items:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+                format: double
+          nullable: true
+      additionalProperties: false
+    PrebidTimeoutOutVars:
+      type: object
+      properties:
+        prebidTimeout:
+          type: integer
+          format: int32
+        awxTimeout:
+          type: integer
+          format: int32
+        bundleUrl:
+          type: string
+          nullable: true
+          deprecated: true
+        bundleId:
+          type: string
+          nullable: true
+        gptEnableSingleRequest:
+          type: boolean
+        gptLazyLoading:
+          type: string
+          nullable: true
+        buyItNowSkipGoogleAdManager:
+          type: boolean
+        testVariant:
+          type: string
+          nullable: true
+        deviceClass:
+          type: string
+          nullable: true
+        disableInitialAdLoad:
+          type: boolean
+        javascriptHead:
+          type: string
+          nullable: true
+        javascriptBody:
+          type: string
+          nullable: true
+      additionalProperties: false
+    PrecipitationSummary:
+      type: object
+      properties:
+        past12Hours:
+          type: string
+          nullable: true
+        past18Hours:
+          type: string
+          nullable: true
+        past24Hours:
+          type: string
+          nullable: true
+        past3Hours:
+          type: string
+          nullable: true
+        past6Hours:
+          type: string
+          nullable: true
+        past9Hours:
+          type: string
+          nullable: true
+        pastHour:
+          type: string
+          nullable: true
+      additionalProperties: false
+    QuantityRangeEstimate:
+      type: object
+      properties:
+        displayAmount:
+          type: string
+          nullable: true
+        low:
+          $ref: '#/components/schemas/ConfidenceQuantity'
+        high:
+          $ref: '#/components/schemas/ConfidenceQuantity'
+        probability:
+          type: integer
+          format: int32
+          nullable: true
+        phrase:
+          type: string
+          nullable: true
+      additionalProperties: false
+    RainePageView:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        test:
+          type: string
+          nullable: true
+        platform:
+          type: string
+          nullable: true
+        version:
+          type: string
+          nullable: true
+        page:
+          $ref: '#/components/schemas/PageInfo'
+        ads:
+          $ref: '#/components/schemas/AdInfo'
+        session:
+          $ref: '#/components/schemas/SessionInfo'
+        user:
+          $ref: '#/components/schemas/UserInfo'
+        network:
+          $ref: '#/components/schemas/UserNetwork'
+        device:
+          $ref: '#/components/schemas/DeviceInfo'
+        weather:
+          $ref: '#/components/schemas/WeatherInfo'
+        bot:
+          type: boolean
+          description: True if X-Akamai-Bot header is filled; default false
+          nullable: true
+        time:
+          type: string
+          nullable: true
+      additionalProperties: false
+    RecentLocation:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        key:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        longName:
+          type: string
+          nullable: true
+        displayName:
+          type: string
+          nullable: true
+        localTime:
+          type: string
+          nullable: true
+        displayTemperature:
+          type: string
+          nullable: true
+        icon:
+          type: integer
+          format: int32
+          nullable: true
+        color:
+          type: string
+          nullable: true
+        isBefore7PM:
+          type: boolean
+        isDayTime:
+          type: boolean
+        latitude:
+          type: number
+          format: double
+          nullable: true
+        longitude:
+          type: number
+          format: double
+          nullable: true
+      additionalProperties: false
+    SessionInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique ID for the user's session (persistent to 10m after the last pageview)
+          nullable: true
+        partner:
+          type: string
+          description: Unique ID for the partner from the URL
+          nullable: true
+        utm:
+          $ref: '#/components/schemas/UTMInfo'
+      additionalProperties: false
+    Storm:
+      type: object
+      properties:
+        accuId:
+          type: integer
+          format: int32
+          nullable: true
+        eventKey:
+          type: string
+          nullable: true
+        isActive:
+          type: boolean
+        basin:
+          type: string
+          nullable: true
+          readOnly: true
+        basinId:
+          $ref: '#/components/schemas/BasinId'
+        basinSlug:
+          type: string
+          nullable: true
+        governmentId:
+          type: integer
+          format: int32
+          nullable: true
+        level:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        updatedStormName:
+          type: string
+          nullable: true
+        stormPositions:
+          type: array
+          items:
+            $ref: '#/components/schemas/StormPosition'
+          nullable: true
+        peakPosition:
+          $ref: '#/components/schemas/StormPosition'
+        start:
+          type: string
+          format: date-time
+          nullable: true
+        startEpoch:
+          type: integer
+          format: int32
+          nullable: true
+        end:
+          type: string
+          format: date-time
+          nullable: true
+        localStart:
+          type: string
+          format: date-time
+          nullable: true
+        localEnd:
+          type: string
+          format: date-time
+          nullable: true
+        year:
+          type: integer
+          format: int32
+        isFuture:
+          type: boolean
+        stormLink:
+          type: string
+          nullable: true
+        localizedStartDate:
+          type: string
+          nullable: true
+      additionalProperties: false
+    StormIcon:
+      enum:
+        - ExtratropicalStorm
+        - Subtropical
+        - Category0
+        - Category1
+        - Category2
+        - Category3
+        - Category4
+        - Category5
+        - TropicalRainStorm
+        - TropicalDepression
+      type: string
+    StormPosition:
+      type: object
+      properties:
+        coordinates:
+          $ref: '#/components/schemas/Polygon'
+        dateTime:
+          type: string
+          format: date-time
+          nullable: true
+        localDate:
+          type: string
+          format: date-time
+          nullable: true
+        localDayOfWeek:
+          type: string
+          nullable: true
+        dateTimeLabelShort:
+          type: string
+          nullable: true
+        dateTimeLabel:
+          type: string
+          nullable: true
+        shortDateShortTimeLabel:
+          type: string
+          nullable: true
+        direction:
+          type: string
+          nullable: true
+        isCurrent:
+          type: boolean
+          nullable: true
+        isHistorical:
+          type: boolean
+          nullable: true
+        isMarked:
+          type: boolean
+        isPeak:
+          type: boolean
+          nullable: true
+        latitude:
+          type: number
+          format: double
+          nullable: true
+        longitude:
+          type: number
+          format: double
+          nullable: true
+        maximumSustainedWind:
+          type: string
+          nullable: true
+        maximumSustainedWindValue:
+          type: number
+          format: float
+          nullable: true
+        maximumWindGust:
+          type: string
+          nullable: true
+        maximumWindGustValue:
+          type: number
+          format: float
+          nullable: true
+        windDegrees:
+          type: number
+          format: float
+          nullable: true
+        minimumPressure:
+          type: string
+          nullable: true
+        position:
+          type: string
+          nullable: true
+        speed:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        localizedStatus:
+          type: string
+          nullable: true
+        statusName:
+          type: string
+          nullable: true
+          readOnly: true
+        statusIcon:
+          $ref: '#/components/schemas/StormIcon'
+        statusIconString:
+          type: string
+          nullable: true
+          readOnly: true
+        landmarkReferences:
+          type: array
+          items:
+            $ref: '#/components/schemas/LandmarkReference'
+          nullable: true
+        eventKey:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ThemeType:
+      enum:
+        - Light
+        - Dark
+        - System
+      type: string
+    UTMInfo:
+      type: object
+      properties:
+        source:
+          type: string
+          description: utm_source from the URL
+          nullable: true
+        medium:
+          type: string
+          description: utm_medium from the URL
+          nullable: true
+        campaign:
+          type: string
+          description: utm_campaign from the URL
+          nullable: true
+        term:
+          type: string
+          description: utm_term from the URL
+          nullable: true
+      additionalProperties: false
+    UVIndex:
+      type: object
+      properties:
+        category:
+          type: string
+          nullable: true
+        value:
+          type: number
+          format: float
+      additionalProperties: false
+    UserInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique ID for the user (persistent across sessions)
+          nullable: true
+        language:
+          type: string
+          description: Language code set for the product for the user (en-us, en-gb, etc.)
+          nullable: true
+        country:
+          type: string
+          description: "Country code for the user's location.\r\nEg. US"
+          nullable: true
+        region:
+          type: string
+          description: "Region code for the user's location.\r\nEg. PA"
+          nullable: true
+        city:
+          type: string
+          description: City for the location
+          nullable: true
+        dma:
+          type: string
+          description: "DMA for the user's location.\r\nEg. 566. Not available outside of the US."
+          nullable: true
+        start:
+          type: string
+          description: "Date of the user's first visit.\r\nI.e. Cookie creation date"
+          nullable: true
+        offset:
+          type: string
+          description: "Valid string of the user's current UTC offset in hh:mm:ss format.\r\nEx. -05:00 or 05:00"
+          nullable: true
+      additionalProperties: false
+    UserNetwork:
+      type: object
+      properties:
+        throughput:
+          type: string
+          description: Category of 'network speed' for the user. Eg. 'vhigh'
+          nullable: true
+        network:
+          type: string
+          description: Name of the network for the user. Eg. 'comcast'
+          nullable: true
+        type:
+          type: string
+          description: Type of network for the user. Eg. 'cable'
+          nullable: true
+      additionalProperties: false
+    WeatherEventType:
+      enum:
+        - Ice
+        - Rain
+        - SevereThunderstorm
+        - Snow
+        - SustainedWind
+        - Thunderstorm
+        - Tornado
+        - Tropical
+        - Wind
+        - WindGust
+        - Unknown
+        - Hail
+        - Flooding
+        - FlashFlooding
+        - CoastalFlooding
+        - RiverFlooding
+        - Winter
+      type: string
+    WeatherInfo:
+      type: object
+      properties:
+        key:
+          type: string
+          description: "Surefind location key for the user's weather location\r\nEg. 335315"
+          nullable: true
+      additionalProperties: false
+    WindDirectionDisplayType:
+      enum:
+        - Cardinal
+        - Degrees
+      type: string
