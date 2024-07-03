@@ -7,8 +7,8 @@ description: >-
 image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 url: https://raw.githubusercontent.com/apis-json/artisanal/main/apis/weatherbit.yml
 created: 2023/11/20
-modified: 2023/11/20
-specificationVersion: '0.16'
+modified: '2024-07-03'
+specificationVersion: '0.18'
 tags: []
 apis:
   - name: Weatherbit Current Weather API
@@ -25,7 +25,7 @@ apis:
       - type: Documentation
         url: https://www.weatherbit.io/api/weather-current
       - type: OpenAPI
-        url: properties/weatherbit-current-weather-openapi-original.yml  
+        url: properties/weatherbit-current-weather-openapi-original.yml
     overlays: []
     aid: weatherbit:weatherbit-current-weather-api
   - name: Weatherbit Severe Weather Alerts API
@@ -143,4 +143,5 @@ overlays:
   - type: API Evangelist Ratings
     url: overlays/apis-io-search.yml
 aid: weatherbit
+
 ---
