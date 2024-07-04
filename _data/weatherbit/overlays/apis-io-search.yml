@@ -8,7 +8,8 @@ url: https://raw.githubusercontent.com/apis-json/artisanal/main/apis/weatherbit.
 created: 2023/11/20
 modified: '2024-07-04'
 specificationVersion: '0.18'
-tags: []
+tags:
+  - Weather
 apis:
   - name: Weatherbit Current Weather API
     description: >-
