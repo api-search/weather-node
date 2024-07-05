@@ -5,7 +5,7 @@ description: >-
   quality weather forecasts, observations, and historical weather data
   possibl-e.
 image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-url: https://raw.githubusercontent.com/apis-json/artisanal/main/apis/weatherbit.yml
+url: https://raw.githubusercontent.com/api-search/weather/main/_apis/weatherbit/apis.md
 created: 2023/11/20
 modified: '2024-07-03'
 specificationVersion: '0.18'
