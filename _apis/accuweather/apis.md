@@ -1,11 +1,11 @@
----
 name: AccuWeather
 description: >-
   AccuWeather provides the world's most sophisticated weather intelligence to
   make lives simpler, safer, and better. Our mission is to save lives and
   protect property.
 image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-url: https://raw.githubusercontent.com/api-search/weather/main/_apis/accuweather/apis.md
+url: >-
+  https://raw.githubusercontent.com/api-search/weather/main/_apis/accuweather/apis.md
 created: '2023-11-22T00:00:00.000Z'
 modified: '2024-07-03'
 specificationVersion: '0.18'
@@ -108,5 +108,3 @@ overlays:
   - type: API Evangelist Ratings
     url: overlays/apis-io-search.yml
 aid: accuweather
-
----
