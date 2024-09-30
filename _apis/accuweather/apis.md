@@ -1,3 +1,4 @@
+---
 name: AccuWeather
 description: >-
   AccuWeather provides the world's most sophisticated weather intelligence to
@@ -108,3 +109,4 @@ overlays:
   - type: API Evangelist Ratings
     url: overlays/apis-io-search.yml
 aid: accuweather
+---

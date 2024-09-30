@@ -1,3 +1,4 @@
+---
 name: Weatherbit
 description: >-
   Our mission at Weatherbit.io is pretty simple. It is to provide the highest
@@ -143,3 +144,4 @@ overlays:
   - type: API Evangelist Ratings
     url: overlays/apis-io-search.yml
 aid: weatherbit
+---
